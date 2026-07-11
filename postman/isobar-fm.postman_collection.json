@@ -71,7 +71,7 @@
                 "bands"
               ]
             },
-            "description": "Screen 1 - default listing, ORDEM ALFABETICA (name asc)."
+            "description": "Screen 1 - default listing, alphabetical (name asc)."
           },
           "response": []
         },
@@ -106,7 +106,7 @@
                 }
               ]
             },
-            "description": "Screen 1 - POPULARIDADE, most played first."
+            "description": "Screen 1 - popularity, most played first."
           },
           "response": []
         },
@@ -275,7 +275,7 @@
                 "bands"
               ]
             },
-            "description": "Screen 1 - default listing, ORDEM ALFABETICA (name asc)."
+            "description": "Screen 1 - default listing, alphabetical (name asc)."
           },
           "response": []
         },
@@ -310,7 +310,7 @@
                 }
               ]
             },
-            "description": "Screen 1 - POPULARIDADE, most played first."
+            "description": "Screen 1 - popularity, most played first."
           },
           "response": []
         },

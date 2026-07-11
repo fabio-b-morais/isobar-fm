@@ -14,9 +14,9 @@ by **unit tests**.
 
 | Screen | Behaviour | Endpoint |
 |---|---|---|
-| List "12 resultados" with **ORDEM ALFABÉTICA / POPULARIDADE** | list + sort | `GET /api/v1/bands?sort=name\|popularity&order=asc\|desc` |
+| List of results with an **alphabetical / popularity** toggle | list + sort | `GET /api/v1/bands?sort=name\|popularity&order=asc\|desc` |
 | Search "pink" | filter by name | `GET /api/v1/bands?q=pink` |
-| Band detail (Truckfighters) with **ÁLBUNS** | detail + resolved albums | `GET /api/v1/bands/{id}` |
+| Band detail (Truckfighters) with **albums** | detail + resolved albums | `GET /api/v1/bands/{id}` |
 
 The upstream band object only references albums by id, so the detail endpoint
 resolves each album against the upstream `/albums/{id}` endpoint and returns the
@@ -154,10 +154,10 @@ BASE=https://<SERVICE_URL>
 # 1) Health check
 curl "$BASE/actuator/health"
 
-# 2) List all bands — alphabetical (screen 1, "ORDEM ALFABÉTICA")
+# 2) List all bands — alphabetical (screen 1, alphabetical toggle)
 curl "$BASE/api/v1/bands"
 
-# 3) Sort by popularity, most played first (screen 1, "POPULARIDADE")
+# 3) Sort by popularity, most played first (screen 1, popularity toggle)
 curl "$BASE/api/v1/bands?sort=popularity&order=desc"
 
 # 4) Search by name (screen 2)
