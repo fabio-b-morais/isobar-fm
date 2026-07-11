@@ -5,7 +5,7 @@ A Java/Spring Boot backend that consumes the DWS bands API
 a **caching layer**, built with **DDD + Clean Architecture + SOLID** and covered
 by **unit tests**.
 
-> **Live on AWS:** `https://<SERVICE_URL>`
+> **Live on AWS:** `https://w3gc3m339d.us-east-1.awsapprunner.com`
 > Jump to [Testing the live API on AWS](#-testing-the-live-api-on-aws-curl) for a copy‑paste curl walkthrough.
 
 ---
@@ -28,8 +28,8 @@ Interactive docs are generated with springdoc/OpenAPI 3:
 
 | | Local | AWS |
 |---|---|---|
-| Swagger UI  | http://localhost:8080/swagger-ui.html | `https://<SERVICE_URL>/swagger-ui.html` |
-| OpenAPI JSON | http://localhost:8080/v3/api-docs     | `https://<SERVICE_URL>/v3/api-docs` |
+| Swagger UI  | http://localhost:8080/swagger-ui.html | `https://w3gc3m339d.us-east-1.awsapprunner.com/swagger-ui.html` |
+| OpenAPI JSON | http://localhost:8080/v3/api-docs     | `https://w3gc3m339d.us-east-1.awsapprunner.com/v3/api-docs` |
 
 ---
 
@@ -146,10 +146,10 @@ creates/redeploys the service, printing the public HTTPS URL when `RUNNING`.
 
 ## 🔎 Testing the live API on AWS (curl)
 
-Replace `<SERVICE_URL>` with the deployed host (also shown at the top).
+Replace `w3gc3m339d.us-east-1.awsapprunner.com` with the deployed host (also shown at the top).
 
 ```bash
-BASE=https://<SERVICE_URL>
+BASE=https://w3gc3m339d.us-east-1.awsapprunner.com
 
 # 1) Health check
 curl "$BASE/actuator/health"

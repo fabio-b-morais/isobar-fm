@@ -28,7 +28,8 @@ echo ">> ECR repo ready: ${REPO}"
 # 2) Build & push image
 aws ecr get-login-password --region "${REGION}" \
   | docker login --username AWS --password-stdin "${REGISTRY}"
-docker build -t "${REPO}:${TAG}" .
+# --provenance=false -> single-platform manifest; App Runner cannot pull an OCI image index
+docker build --provenance=false -t "${REPO}:${TAG}" .
 docker tag "${REPO}:${TAG}" "${IMAGE_URI}"
 docker push "${IMAGE_URI}"
 echo ">> Image pushed: ${IMAGE_URI}"

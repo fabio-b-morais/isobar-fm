@@ -12,7 +12,7 @@
     },
     {
       "key": "aws_base_url",
-      "value": "https://REPLACE_WITH_APP_RUNNER_URL",
+      "value": "https://w3gc3m339d.us-east-1.awsapprunner.com",
       "type": "string"
     },
     {
