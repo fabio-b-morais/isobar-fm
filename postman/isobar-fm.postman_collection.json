@@ -1,0 +1,434 @@
+{
+  "info": {
+    "name": "isobar.fm - DWS Backend Test",
+    "description": "REST API for the DWS backend test (bands + albums with a caching layer).\n\nTwo folders:\n- **Local**: uses {{local_base_url}} (default http://localhost:8080)\n- **AWS**: uses {{aws_base_url}} - set it to the App Runner URL after deploy.\n\nShared variable {{band_id}} is used by the band-detail requests.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "local_base_url",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "aws_base_url",
+      "value": "https://REPLACE_WITH_APP_RUNNER_URL",
+      "type": "string"
+    },
+    {
+      "key": "band_id",
+      "value": "5dcdb5eb-cb72-4e6e-9e63-b7bace604965",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Local",
+      "description": "Runs against the app started locally (mvn spring-boot:run).",
+      "item": [
+        {
+          "name": "Health check",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{local_base_url}}/actuator/health",
+              "host": [
+                "{{local_base_url}}"
+              ],
+              "path": [
+                "actuator",
+                "health"
+              ]
+            },
+            "description": "Actuator health endpoint (also used by the App Runner health check)."
+          },
+          "response": []
+        },
+        {
+          "name": "List bands (alphabetical)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{local_base_url}}/api/v1/bands",
+              "host": [
+                "{{local_base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "bands"
+              ]
+            },
+            "description": "Screen 1 - default listing, ORDEM ALFABETICA (name asc)."
+          },
+          "response": []
+        },
+        {
+          "name": "List bands by popularity (desc)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{local_base_url}}/api/v1/bands?sort=popularity&order=desc",
+              "host": [
+                "{{local_base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "bands"
+              ],
+              "query": [
+                {
+                  "key": "sort",
+                  "value": "popularity"
+                },
+                {
+                  "key": "order",
+                  "value": "desc"
+                }
+              ]
+            },
+            "description": "Screen 1 - POPULARIDADE, most played first."
+          },
+          "response": []
+        },
+        {
+          "name": "Search bands by name",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{local_base_url}}/api/v1/bands?q=bon",
+              "host": [
+                "{{local_base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "bands"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "bon"
+                }
+              ]
+            },
+            "description": "Screen 2 - case-insensitive name filter (try 'bon')."
+          },
+          "response": []
+        },
+        {
+          "name": "Band detail with albums",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{local_base_url}}/api/v1/bands/{{band_id}}",
+              "host": [
+                "{{local_base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "bands",
+                "{{band_id}}"
+              ]
+            },
+            "description": "Screen 3 - full band detail incl. resolved albums. Set {{band_id}} from a listing response."
+          },
+          "response": []
+        },
+        {
+          "name": "Error - invalid sort (400)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{local_base_url}}/api/v1/bands?sort=bogus",
+              "host": [
+                "{{local_base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "bands"
+              ],
+              "query": [
+                {
+                  "key": "sort",
+                  "value": "bogus"
+                }
+              ]
+            },
+            "description": "Validation error -> 400 Bad Request."
+          },
+          "response": []
+        },
+        {
+          "name": "Error - unknown band (404)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{local_base_url}}/api/v1/bands/does-not-exist",
+              "host": [
+                "{{local_base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "bands",
+                "does-not-exist"
+              ]
+            },
+            "description": "Unknown id -> 404 Not Found."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "AWS",
+      "description": "Runs against the deployed App Runner service. Set {{aws_base_url}} first.",
+      "item": [
+        {
+          "name": "Health check",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{aws_base_url}}/actuator/health",
+              "host": [
+                "{{aws_base_url}}"
+              ],
+              "path": [
+                "actuator",
+                "health"
+              ]
+            },
+            "description": "Actuator health endpoint (also used by the App Runner health check)."
+          },
+          "response": []
+        },
+        {
+          "name": "List bands (alphabetical)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{aws_base_url}}/api/v1/bands",
+              "host": [
+                "{{aws_base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "bands"
+              ]
+            },
+            "description": "Screen 1 - default listing, ORDEM ALFABETICA (name asc)."
+          },
+          "response": []
+        },
+        {
+          "name": "List bands by popularity (desc)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{aws_base_url}}/api/v1/bands?sort=popularity&order=desc",
+              "host": [
+                "{{aws_base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "bands"
+              ],
+              "query": [
+                {
+                  "key": "sort",
+                  "value": "popularity"
+                },
+                {
+                  "key": "order",
+                  "value": "desc"
+                }
+              ]
+            },
+            "description": "Screen 1 - POPULARIDADE, most played first."
+          },
+          "response": []
+        },
+        {
+          "name": "Search bands by name",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{aws_base_url}}/api/v1/bands?q=bon",
+              "host": [
+                "{{aws_base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "bands"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "bon"
+                }
+              ]
+            },
+            "description": "Screen 2 - case-insensitive name filter (try 'bon')."
+          },
+          "response": []
+        },
+        {
+          "name": "Band detail with albums",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{aws_base_url}}/api/v1/bands/{{band_id}}",
+              "host": [
+                "{{aws_base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "bands",
+                "{{band_id}}"
+              ]
+            },
+            "description": "Screen 3 - full band detail incl. resolved albums. Set {{band_id}} from a listing response."
+          },
+          "response": []
+        },
+        {
+          "name": "Error - invalid sort (400)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{aws_base_url}}/api/v1/bands?sort=bogus",
+              "host": [
+                "{{aws_base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "bands"
+              ],
+              "query": [
+                {
+                  "key": "sort",
+                  "value": "bogus"
+                }
+              ]
+            },
+            "description": "Validation error -> 400 Bad Request."
+          },
+          "response": []
+        },
+        {
+          "name": "Error - unknown band (404)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{aws_base_url}}/api/v1/bands/does-not-exist",
+              "host": [
+                "{{aws_base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "bands",
+                "does-not-exist"
+              ]
+            },
+            "description": "Unknown id -> 404 Not Found."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

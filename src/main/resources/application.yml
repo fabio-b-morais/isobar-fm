@@ -1,0 +1,27 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: isobar-fm
+
+# Upstream third-party service (DWS bands API) + cache tuning.
+bands-api:
+  base-url: https://bands-api.vercel.app/api
+  connect-timeout-ms: 3000
+  read-timeout-ms: 5000
+
+cache:
+  # Time-to-live for cached upstream responses (the "caching layer").
+  ttl-minutes: 10
+  maximum-size: 500
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
